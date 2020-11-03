@@ -1,0 +1,70 @@
+#include <iostream>
+#include<string>
+
+class Item {
+public:
+	Item(int v, Item* n) { _value = v; _next = n; }
+	~Item() { std::cout << "Deleting item " << _value << std::endl;
+	}
+	int value() const { return _value; }
+	Item* next() const { return _next; }
+private:
+	int _value;
+	Item* _next;
+};
+class LinkedList {
+public:
+	LinkedList() { items = 0; _length = 0; }
+	~LinkedList();
+	void push(int i);
+	int pop(int* i);
+	int top(int* i) const;
+	int length() const { return _length; }
+private:
+	Item* items; int _length;
+};
+LinkedList::~LinkedList() {
+	Item* nextItem;
+	for (Item* i = items; i != 0; i = nextItem) {
+		nextItem = i->next();
+		delete i;
+	}
+}
+void LinkedList::push(int i) {
+	Item* item = new Item(i, items);
+	items = item;
+	_length++;
+}
+
+int LinkedList::top(int* i) const {
+	if (items != 0) {
+		*i = items->value();
+		return 1;
+	} else
+		return 0;
+}
+int LinkedList::pop(int* i) {
+	if (items != 0) {
+		Item* top = items;
+		items = top->next();
+		*i = top->value();
+		delete top;
+		_length--;
+		return 1;
+	}	else
+		return 0;
+}
+int main(int argc, const char* argv[]) {
+	LinkedList l;
+	l.push(1); l.push(4); l.push(9); l.push(16);
+	int i;
+
+	while (l.top(&i)) {
+		std::cout << i << " " << l.length() << "; ";
+		l.pop(&i);
+	}
+	std::cout << "Length: " << l.length() << " (should be 0)" << std::endl;
+	l.push(2); l.push(3); l.push(5); l.push(7);
+	std::cout << "Length: " << l.length() << " (should be 4)" << std::endl;
+	return 0;
+}
