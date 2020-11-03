@@ -1,0 +1,38 @@
+#include <string>
+#include <iostream>
+class Base {
+public:
+	std::string name;
+	Base(std::string _name) : name(_name) {
+		std::cout << "Base's constructor for " << name << std::endl;
+	}
+	~Base() {
+		std::cout << "Base's destructor for " << name << std::endl;
+	}
+	void method() {
+		std::cout << "Base's method for " << name << std::endl;
+	}
+};
+class Derived : public Base {
+public:
+	Derived(std::string name) : Base(name) {
+		std::cout << "Derived's constructor for " << name << std::endl;
+	}
+	~Derived() {
+		std::cout << "Derived's destructor for " << name << std::endl;
+	}
+	void method() {
+		std::cout << "Derived's method for " << name << std::endl;
+	}
+};
+int main(int argc, const char* argv[]) {
+	Base base("base");
+	base.method();
+	Derived derived("derived");
+	derived.method();
+	Base& baseRef = derived; // No cast necessary
+	Derived& derivedRef = derived;
+	derivedRef.method();
+	baseRef.method();
+	return 0;
+}
